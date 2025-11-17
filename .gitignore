@@ -25,6 +25,8 @@ replay_pid*
 
 # Database files
 data/
+mysql/
+!order-service/docker/mysql/
 
 # IDE files
 .idea/

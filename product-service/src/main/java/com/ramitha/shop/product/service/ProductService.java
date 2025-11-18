@@ -17,6 +17,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
 
+    // Create Product
     public Product createProduct(ProductRequest productRequest) {
         Product product = Product.builder()
                 .name(productRequest.name())
@@ -30,6 +31,7 @@ public class ProductService {
         return product;
     }
 
+    // Get All Products
     public List<ProductResponse> getAllProducts() {
         return productRepository.findAll()
                 .stream()
@@ -40,5 +42,40 @@ public class ProductService {
                         product.getPrice()
                 ))
                 .toList();
+    }
+
+    // Get Product By ID
+    public ProductResponse getProductById(String productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + productId));
+        return new ProductResponse(
+                product.getId(),
+                product.getName(),
+                product.getDescription(),
+                product.getPrice()
+        );
+    }
+
+    // Update Product By ID
+    public ProductResponse updateProductById(String productId, ProductRequest productRequest) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found with id: " + productId));
+        product.setName(productRequest.name());
+        product.setDescription(productRequest.description());
+        product.setPrice(productRequest.price());
+        productRepository.save(product);
+        log.info("Product with id {} updated successfully", productId);
+        return new ProductResponse(
+                product.getId(),
+                product.getName(),
+                product.getDescription(),
+                product.getPrice()
+        );
+    }
+
+    // Delete Product By ID
+    public void deleteProductById(String productId) {
+        productRepository.deleteById(productId);
+        log.info("Product with id {} deleted successfully", productId);
     }
 }

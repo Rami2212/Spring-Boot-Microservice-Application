@@ -1,9 +1,8 @@
 package com.ramitha.shop.inventory.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,11 +11,13 @@ import org.springframework.stereotype.Service;
 @Table(name = "t_inventory")
 @Getter
 @Service
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Inventory {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String skuCode;

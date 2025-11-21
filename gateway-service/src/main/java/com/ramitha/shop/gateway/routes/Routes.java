@@ -8,6 +8,8 @@ import org.springframework.web.servlet.function.RequestPredicates;
 import org.springframework.web.servlet.function.RouterFunction;
 import org.springframework.web.servlet.function.ServerResponse;
 
+import static org.springframework.cloud.gateway.server.mvc.filter.FilterFunctions.setPath;
+
 @Configuration
 public class Routes {
 
@@ -15,6 +17,14 @@ public class Routes {
     public RouterFunction<ServerResponse> productServiceRoute() {
         return GatewayRouterFunctions.route("product-service")
                 .route(RequestPredicates.path("/api/products"), HandlerFunctions.http("http://localhost:8080"))
+                .build();
+    }
+
+    @Bean
+    public RouterFunction<ServerResponse> productServiceSwaggerRoute() {
+        return GatewayRouterFunctions.route("product-service-swagger")
+                .route(RequestPredicates.path("/aggregate/product-service/v3/api-docs"), HandlerFunctions.http("http://localhost:8080"))
+                .filter(setPath("/api-docs"))
                 .build();
     }
 

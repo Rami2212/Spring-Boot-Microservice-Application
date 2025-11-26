@@ -2,11 +2,13 @@ package com.ramitha.shop.order.service;
 
 import com.ramitha.shop.order.client.InventoryClient;
 import com.ramitha.shop.order.dto.OrderRequest;
+import com.ramitha.shop.order.event.OrderPlacedEvent;
 import com.ramitha.shop.order.exception.OutOfStockException;
 import com.ramitha.shop.order.model.Order;
 import com.ramitha.shop.order.repository.OrderRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -20,6 +22,8 @@ public class OrderService {
 
     private final InventoryClient inventoryClient;
 
+    private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
+
     public Order placeOrder(OrderRequest orderRequest) {
 
         if (inventoryClient.isInStock(orderRequest.skuCode(), orderRequest.quantity())) {
@@ -31,6 +35,12 @@ public class OrderService {
                     .build();
 
             orderRepository.save(order);
+
+            OrderPlacedEvent orderPlacedEvent = new OrderPlacedEvent(order.getOrderNumber(), orderRequest.userDetails().email());
+
+            log.info("Sending OrderPlacedEvent to Kafka: {}", orderPlacedEvent);
+
+            kafkaTemplate.send("order-placed", orderPlacedEvent);
 
             log.info("Order placed successfully");
 

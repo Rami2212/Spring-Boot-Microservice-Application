@@ -7,5 +7,12 @@ public record OrderRequest (
         String orderNumber,
         String skuCode,
         BigDecimal price,
-        Integer quantity) {
+        Integer quantity,
+        UserDetails userDetails) {
+
+    public record UserDetails (
+            String firstName,
+            String lastName,
+            String email
+    ) {}
 }

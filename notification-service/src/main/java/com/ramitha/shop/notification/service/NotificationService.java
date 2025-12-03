@@ -24,12 +24,13 @@ public class NotificationService {
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
             messageHelper.setFrom("shop@gmail.com");
-            messageHelper.setTo(orderPlacedEvent.getEmail());
+            messageHelper.setTo(orderPlacedEvent.getEmail().toString());
             messageHelper.setSubject(String.format("Order Placed - %s", orderPlacedEvent.getOrderNumber()));
             messageHelper.setText(String.format("""
                             <html>
                             <body>
                                 <h1>Thank you for your order!</h1>
+                                <p> Hi %s %s</p>
                                 <p>Your order with order number <strong>%s</strong> has been successfully placed.</p>
                                 <p>We will notify you once your order is shipped.</p>
                                 <br/>
@@ -38,6 +39,8 @@ public class NotificationService {
                             </body>
                             </html>
                             """,
+                    orderPlacedEvent.getFirstName().toString(),
+                    orderPlacedEvent.getLastName().toString(),
                     orderPlacedEvent.getOrderNumber()));
         };
 

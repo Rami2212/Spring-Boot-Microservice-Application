@@ -20,7 +20,8 @@ public class SecurityConfig {
             "/swagger-ui.html",
             "/swagger-resources/**",
             "/api-docs/**",
-            "/aggregate/**"
+            "/aggregate/**",
+            "/actuator/prometheus"
     };
 
     @Bean

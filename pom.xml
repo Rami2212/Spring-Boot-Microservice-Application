@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.ramitha.shop</groupId>
     <artifactId>spring-boot-microservice-application</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
     <name>spring-boot-microservice-application</name>
     <description>Spring Boot Microservice Application</description>

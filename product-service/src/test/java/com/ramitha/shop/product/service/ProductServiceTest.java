@@ -17,11 +17,12 @@ class ProductServiceTest {
 
     @Test
     void shouldCreateProductAndSaveToRepository() {
-        ProductRequest request = new ProductRequest(null, "Test Product", "This is a test product", 499.99);
+        ProductRequest request = new ProductRequest(null, "Test Product", "test_product", "This is a test product", 499.99);
 
         Product product = productService.createProduct(request);
 
         assertThat(product.getName()).isEqualTo("Test Product");
+        assertThat(product.getSkuCode()).isEqualTo("test_product");
         assertThat(product.getDescription()).isEqualTo("This is a test product");
         assertThat(product.getPrice()).isEqualTo(499.99);
 
@@ -31,8 +32,8 @@ class ProductServiceTest {
     @Test
     void shouldGetAllProducts() {
         Mockito.when(productRepository.findAll()).thenReturn(List.of(
-                new Product("1", "Product 1", "Description 1", 100.0),
-                new Product("2", "Product 2", "Description 2", 200.0)
+                new Product("1", "Product 1", "product_1", "Description 1", 100.0),
+                new Product("2", "Product 2", "product_2", "Description 2", 200.0)
         ));
 
         var products = productService.getAllProducts();
@@ -46,7 +47,7 @@ class ProductServiceTest {
     void shouldGetProductById() {
         String productId = "1";
         Mockito.when(productRepository.findById(productId)).thenReturn(java.util.Optional.of(
-                new Product("1", "Product 1", "Description 1", 100.0)
+                new Product("1", "Product 1", "product_1", "Description 1", 100.0)
         ));
         var product = productService.getProductById(productId);
         assertThat(product.name()).isEqualTo("Product 1");
@@ -55,9 +56,9 @@ class ProductServiceTest {
     @Test
     void shouldUpdateProductById() {
         String productId = "1";
-        ProductRequest updateRequest = new ProductRequest(null, "Updated Product", "Updated Description", 150.0);
+        ProductRequest updateRequest = new ProductRequest(null, "Updated Product", "product_1", "Updated Description", 150.0);
         Mockito.when(productRepository.findById(productId)).thenReturn(java.util.Optional.of(
-                new Product("1", "Product 1", "Description 1", 100.0)
+                new Product("1", "Product 1", "product_1","Description 1", 100.0)
         ));
 
         var updatedProduct = productService.updateProductById(productId, updateRequest);
